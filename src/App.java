@@ -1,21 +1,21 @@
 import com.hjss.controllers.*;
-import com.hjss.views.LearnerCliView;
+import com.hjss.views.StudentCliView;
 
 public class App {
-    private LearnerController learnerController;
+    private StudentController studentController;
     private CoachController coachController;
     private LessonController lessonController;
     public App () {
-        LearnerCliView learnerCliView = new LearnerCliView();
+        StudentCliView studentCliView = new StudentCliView();
 
         // Initialize controllers
-        learnerController = new LearnerController(learnerCliView);
+        studentController = new StudentController(studentCliView);
         coachController = new CoachController();
         lessonController = new LessonController();
     }
 
     public void start() {
         // Start the application by showing the main menu for learners
-        learnerController.showMainMenu();
+        studentController.showMainMenu();
     }
 }

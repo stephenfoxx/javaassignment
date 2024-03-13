@@ -1,8 +1,8 @@
 package com.hjss.views;
 
-public class LearnerCliView extends View{
+public class StudentCliView extends View{
 
-    public LearnerCliView() {
+    public StudentCliView() {
         // Menu Length
         super(6);
     }

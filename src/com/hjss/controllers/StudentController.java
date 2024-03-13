@@ -1,17 +1,17 @@
 package com.hjss.controllers;
 
-import com.hjss.views.LearnerCliView;
+import com.hjss.views.StudentCliView;
 
-public class LearnerController {
-    private LearnerCliView learnerCliView;
+public class StudentController {
+    private StudentCliView studentCliView;
 
-    public LearnerController(LearnerCliView learnerCliView) {
-        this.learnerCliView = learnerCliView;
+    public StudentController(StudentCliView studentCliView) {
+        this.studentCliView = studentCliView;
     }
 
     public void showMainMenu() {
-        learnerCliView.displayMenu();
-        int choice = learnerCliView.getMenuChoice();
+        studentCliView.displayMenu();
+        int choice = studentCliView.getMenuChoice();
 
         // Based on the choice, perform appropriate actions
         switch (choice) {
