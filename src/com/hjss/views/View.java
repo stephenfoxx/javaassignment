@@ -2,6 +2,7 @@ package com.hjss.views;
 
 import com.hjss.exception.InvalidMenuChoiceException;
 
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -44,6 +45,11 @@ public abstract class View {
 
     protected boolean isValidMenuChoice(int choice) {
         return choice >= 0 && choice <= length;
+    }
+
+    public String padToTwoDigits(double number) {
+        DecimalFormat df = new DecimalFormat("00");
+        return df.format(number);
     }
 
 }

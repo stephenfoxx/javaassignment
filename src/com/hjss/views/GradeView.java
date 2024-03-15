@@ -3,7 +3,7 @@ package com.hjss.views;
 public class GradeView extends View {
     public GradeView() {
         // Menu Length
-        super(2);
+        super(5);
     }
 
     public void displayMenu() {

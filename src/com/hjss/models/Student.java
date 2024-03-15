@@ -10,12 +10,19 @@ public class Student {
     private final String contactNumber;
     private Grade grade;
 
-    public Student(String name, int age, Gender gender, String contactNumber, Grade grade) throws InvalidAgeException {
+    public Student(String name, Grade grade, Gender gender, String contactNumber, int age) {
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
-        setGrade(grade);
-        setAge(age);
+        this.grade = grade;
+        this.age = age;
+    }
+
+    public Student(String name, Grade grade, Gender gender, String contactNumber) {
+        this.name = name;
+        this.gender = gender;
+        this.contactNumber = contactNumber;
+        this.grade = grade;
     }
 
     public String getName() {
@@ -67,6 +74,6 @@ public class Student {
     }
 
     public String getAsString() {
-        return "Name: " + getName() + "\nAge: " + getAge() + "\nGender: " + getGender() + "\nGrade: " + getGrade() + "\n Emergency Contact Number: " + getContactNumber();
+        return "Name: " + getName() + "\nAge: " + getAge() + "\nGender: " + getGender() + "\nGrade: " + getGrade() + "\nEmergency Contact Number: " + getContactNumber();
     }
 }

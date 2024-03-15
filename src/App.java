@@ -9,8 +9,6 @@ public class App {
     // Controllers
     private final AppController appController;
     private StudentController studentController;
-//    private CoachController coachController;
-//    private LessonController lessonController;
 
     // Database
     private final List<Student> students = new ArrayList<>();
@@ -20,8 +18,7 @@ public class App {
 
         // Initialize controllers
         studentController = new StudentController(students);
-//        coachController = new CoachController();
-//        lessonController = new LessonController();
+        studentController.createStudents();
 
         appController = new AppController(mainView, studentController);
     }
@@ -29,9 +26,5 @@ public class App {
     public void start() {
         // Start the application by showing the main menu for learners
         appController.showMainMenu();
-
-        for(Student student: students) {
-            System.out.println(student.getAsString());
-        }
     }
 }
