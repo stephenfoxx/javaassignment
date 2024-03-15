@@ -1,11 +1,11 @@
 package com.hjss.views;
 
-public class StudentCliView extends View{
-
-    public StudentCliView() {
+public class MainView extends View{
+    public MainView(){
         // Menu Length
         super(6);
     }
+
     public void displayMenu() {
         System.out.println("Welcome to Hatfield Junior High School");
         System.out.println("1: Book a swimming lesson");

@@ -25,7 +25,7 @@ public abstract class View {
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextInt();
 
-                if (!isValidMenuOption(choice)) {
+                if (!isValidMenuChoice(choice)) {
                     throw new InvalidMenuChoiceException("Enter Valid Menu Option");
                 }
 
@@ -42,7 +42,7 @@ public abstract class View {
         return choice;
     }
 
-    protected boolean isValidMenuOption(int choice) {
+    protected boolean isValidMenuChoice(int choice) {
         return choice >= 0 && choice <= length;
     }
 
