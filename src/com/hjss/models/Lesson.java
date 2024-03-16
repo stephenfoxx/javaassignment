@@ -1,20 +1,14 @@
 package com.hjss.models;
 
 import com.hjss.enums.*;
-import com.hjss.exception.MaxLessonCapacityException;
-import com.hjss.exception.NotMatchingGradeException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Lesson {
     private final int id;
+    private int size;
     private final Grade grade;
     private final Day day;
     private final Time time;
     private final Coach coach;
-
-    private final List<Student> students = new ArrayList<>();
 
     public Lesson(int id, Grade grade, Day day, Time time, Coach coach) {
         this.id = id;
@@ -22,6 +16,7 @@ public class Lesson {
         this.day = day;
         this.time = time;
         this.coach = coach;
+        this.size = 0;
     }
 
     public int getId() {
@@ -44,29 +39,16 @@ public class Lesson {
         return coach;
     }
 
-    public void addStudent(Student student) throws MaxLessonCapacityException, NotMatchingGradeException {
-        // check Student grade
-        if (!student.canUpgrade(grade.getValue())) {
-            // Throw Not matching grade error
-            throw new NotMatchingGradeException();
-        }
-
-        // check vacancy
-        if (getVacancy() < 1) {
-            throw new MaxLessonCapacityException();
-        }
-
-        // Add student
-        students.add(student);
-
-        if (grade != student.getGrade()) {
-            // Upgrade student
-            student.setGrade(grade);
-        }
+    public int getVacancy() {
+        return 4 - getSize();
     }
 
-    public int getVacancy() {
-        return 4 - students.size();
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public String toString() {

@@ -4,13 +4,15 @@ import com.hjss.enums.*;
 import com.hjss.exception.InvalidAgeException;
 
 public class Student {
+    private final int id;
     private final String name;
     private int age;
     private final Gender gender;
     private final String contactNumber;
     private Grade grade;
 
-    public Student(String name, Grade grade, Gender gender, String contactNumber, int age) {
+    public Student(int id, String name, Grade grade, Gender gender, String contactNumber, int age) {
+        this.id = id;
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
@@ -18,11 +20,16 @@ public class Student {
         this.age = age;
     }
 
-    public Student(String name, Grade grade, Gender gender, String contactNumber) {
+    public Student(int id, String name, Grade grade, Gender gender, String contactNumber) {
+        this.id = id;
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
         this.grade = grade;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -59,11 +66,11 @@ public class Student {
 
     public boolean canUpgrade(int value) {
         // This is an instantiation
-        if (this.grade == null) return true;
+        if (this.grade == null) return false;
 
         // Else, It is an update
         int gradeValue = this.grade.getValue();
-        return value == gradeValue || value == gradeValue + 1;
+        return value != gradeValue && value != gradeValue + 1;
     }
 
     private boolean isValidAge(int age) {

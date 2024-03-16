@@ -21,7 +21,11 @@ public class App {
         var lessonController = new LessonController(lessons, coaches);
         lessonController.createLessons();
 
-        appController = new AppController(studentController, lessonController, coachController);
+        List<Booking> bookings = new ArrayList<>();
+        var bookingController = new BookingController(bookings);
+
+        // Inject into App controller
+        appController = new AppController(studentController, lessonController, coachController, bookingController);
     }
 
     public void start() {

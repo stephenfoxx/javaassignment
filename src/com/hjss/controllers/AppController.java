@@ -25,6 +25,7 @@ public class AppController {
     private final StudentController studentController;
     private final LessonController lessonController;
     private final CoachController coachController;
+    private final BookingController bookingController;
 
     /**
      * Internally used data properties
@@ -34,11 +35,10 @@ public class AppController {
     private List<Lesson> lessons;
 
     /**
-     *
      * @param studentController Dependency injection of the student controller.
-     * @param lessonController Dependency injection of the lesson controller
+     * @param lessonController  Dependency injection of the lesson controller
      */
-    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController) {
+    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController, BookingController bookingController) {
         // Instantiate and assign the Application menu options.
         this.mainView = new MainView();
         this.bookLessonView = new BookLessonView();
@@ -51,6 +51,7 @@ public class AppController {
         this.studentController = studentController;
         this.lessonController = lessonController;
         this.coachController = coachController;
+        this.bookingController = bookingController;
     }
 
     // First interaction with the application is to display the application menu
@@ -265,8 +266,8 @@ public class AppController {
         Lesson lessonChoice = lessonController.getLesson(choice);
 
         try {
-            lessonController.bookLesson(lessonChoice, getLoggedInStudent());
-            System.out.println("You have been booked for Lesson " + lessonChoice.getId() + " on " + lessonChoice.getDay() + " by " + lessonChoice.getTime().getValue());
+            Booking booking = bookingController.createBooking(getLoggedInStudent(), lessonChoice);
+            System.out.println("You have been booked for Lesson " + booking.getLesson().getId() + " on " + booking.getLesson().getDay() + " by " + booking.getLesson().getTime().getValue());
         } catch (MaxLessonCapacityException | NotMatchingGradeException e) {
             System.out.println(e.getMessage());
 
