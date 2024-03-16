@@ -186,7 +186,7 @@ public class AppController {
 
         setLessons(lessons);
 
-        String timeTable = lessonController.getTimeTable(lessons, day);
+        String timeTable = lessonController.getTimeTable(lessons);
 
         handleBookLesson(timeTable);
     }

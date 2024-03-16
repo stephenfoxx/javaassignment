@@ -140,13 +140,12 @@ public class LessonController {
     }
 
     public String getTimeTable(List<Lesson> lessons) {
-        int weekCount = 1;
+        int weekCount = 0;
         StringBuilder s = new StringBuilder();
 
         // In week one
         int lessonInWeekCount = 11;
 
-        s.append("Week ").append(weekCount).append("\n");
         for (Lesson ls: lessons) {
             int id = ls.getId();
 
@@ -155,11 +154,24 @@ public class LessonController {
             // ids 12-22 are for week two
             // ids 23-33 are for week three
             // ids 34 - 44 are for week 4
+
             // So we separate in multiples of 11
             if(lessonInWeekCount - id < 0) {
+
+
+                // A week has no filtered lesson ? then we handle header and count appropriately
+                if (lessonInWeekCount + 11 - id < 0) {
+                    s.append("Week ").append(weekCount += 2).append("\n");
+                    lessonInWeekCount += 22;
+                } else {
+                    s.append("Week ").append(++weekCount).append("\n");
+                    lessonInWeekCount += 11;
+                }
+
+            } else if (weekCount == 0) {
                 s.append("Week ").append(++weekCount).append("\n");
-                lessonInWeekCount += 11;
             }
+
             s.append(ls).append("\n\n");
         }
 
