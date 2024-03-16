@@ -25,9 +25,6 @@ public class TimeTableView extends View {
     }
 
     protected boolean isValidMenuChoice(int choice) {
-
-
-
         return ids.contains(choice);
     }
 }

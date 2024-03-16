@@ -6,6 +6,7 @@ import com.hjss.exception.NotMatchingGradeException;
 import com.hjss.models.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -19,12 +20,12 @@ public class LessonController {
     }
 
     public Lesson getLesson(int id) {
-        for(Lesson ls: lessons) {
-            if(ls.getId() == id) {
+        for (Lesson ls : lessons) {
+            if (ls.getId() == id) {
                 return ls;
             }
         }
-        return  null;
+        return null;
     }
 
     public void createLessons() {
@@ -104,6 +105,18 @@ public class LessonController {
         return lessonsForDay;
     }
 
+    public List<Lesson> getLessons(Coach coach) {
+        List<Lesson> lessonsForCoach = new ArrayList<>();
+
+        for (Lesson lesson : lessons) {
+            if (lesson.getCoach().getId() == coach.getId()) {
+                lessonsForCoach.add(lesson);
+            }
+        }
+
+        return lessonsForCoach;
+    }
+
     public String getTimeTable(List<Lesson> lessons, Day day) {
         int splitter, weekCount = 1;
         StringBuilder s = new StringBuilder();
@@ -121,6 +134,33 @@ public class LessonController {
                 s.append("Week ").append(weekCount++).append("\n");
             }
             s.append(lesson.toString()).append("\n\n");
+        }
+
+        return s.toString();
+    }
+
+    public String getTimeTable(List<Lesson> lessons) {
+        int weekCount = 1;
+        StringBuilder s = new StringBuilder();
+
+        // In week one
+        int lessonInWeekCount = 11;
+
+        s.append("Week ").append(weekCount).append("\n");
+        for (Lesson ls: lessons) {
+            int id = ls.getId();
+
+            // Each id is ordered by their creation
+            // i.e. ids 1-11 are for week one,
+            // ids 12-22 are for week two
+            // ids 23-33 are for week three
+            // ids 34 - 44 are for week 4
+            // So we separate in multiples of 11
+            if(lessonInWeekCount - id < 0) {
+                s.append("Week ").append(++weekCount).append("\n");
+                lessonInWeekCount += 11;
+            }
+            s.append(ls).append("\n\n");
         }
 
         return s.toString();

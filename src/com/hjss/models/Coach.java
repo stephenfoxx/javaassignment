@@ -38,7 +38,7 @@ public class Coach {
         this.name = name;
     }
 
-    public String getAsString() {
+    public String toString() {
         return "id: " + id + "\nname: " + name;
     }
 }

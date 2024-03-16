@@ -70,7 +70,7 @@ public class Lesson {
     }
 
     public String toString() {
-        return "ID: " + getId() + ", Day: " + getDay() + ", Time: " + getTime().getValue() + ", Coach: " + getCoach().getName() + ", Grade: " + getGrade();
+        return "ID: " + getId() + ", Day: " + getDay() + ", Time: " + getTime().getValue() + ", Coach: " + getCoach().getName() + ", Grade: " + getGrade() + ", Vacancy: " + getVacancy();
     }
 }
 

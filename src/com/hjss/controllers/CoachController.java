@@ -12,9 +12,23 @@ public class CoachController {
 
     public void createCoaches() {
         coaches.add(new Coach(1, "Rotimi"));
-        coaches.add(new Coach(1, "Burna Boy"));
+        coaches.add(new Coach(2, "Burna Boy"));
         coaches.add(new Coach(3, "Wizkd"));
         coaches.add(new Coach(4, "Davido"));
         coaches.add(new Coach(5, "Olamide"));
+    }
+
+    public List<Coach> getCoaches() {
+        return coaches;
+    }
+
+    public Coach getCoach(int id) {
+        for (Coach coach: coaches) {
+            if(coach.getId() == id) {
+                return coach;
+            }
+        }
+
+        return null;
     }
 }

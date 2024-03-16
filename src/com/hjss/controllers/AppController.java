@@ -8,30 +8,49 @@ import com.hjss.views.*;
 import java.util.List;
 
 public class AppController {
-    private MainView mainView;
-    private BookLessonView bookLessonView;
-    private BookByDayView bookByDayView;
-    private TimeTableView timeTableView;
+    /**
+     * Views are the Menu classes
+     */
+    private final MainView mainView;
+    private final BookLessonView bookLessonView;
+    private final BookByDayView bookByDayView;
+    private final TimeTableView timeTableView;
+    private final BookByCoachView bookByCoachView;
 
-    private StudentController studentController;
-    private LessonController lessonController;
+    /**
+     * Controller classes to handle Model logic
+     */
+    private final StudentController studentController;
+    private final LessonController lessonController;
+    private final CoachController coachController;
 
+    /**
+     * Internally used data properties
+     */
     private Student loggedInStudent;
 
     private List<Lesson> lessons;
 
-    public AppController(StudentController studentController, LessonController lessonController) {
+    /**
+     *
+     * @param studentController Dependency injection of the student controller.
+     * @param lessonController Dependency injection of the lesson controller
+     */
+    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController) {
+        // Instantiate and assign the Application menu options.
         this.mainView = new MainView();
         this.bookLessonView = new BookLessonView();
         this.bookByDayView = new BookByDayView();
         this.timeTableView = new TimeTableView();
+        this.bookByCoachView = new BookByCoachView();
 
-
+        // Inject controllers into Class instance
         this.studentController = studentController;
         this.lessonController = lessonController;
-
+        this.coachController = coachController;
     }
 
+    // First interaction with the application is to display the application menu
     public void showMainMenu() {
         mainView.displayMenu();
         int choice = mainView.getMenuChoice();
@@ -173,6 +192,25 @@ public class AppController {
     }
 
     private void handleBookByCoach() {
+        Coach coach;
+
+        // Update coaches
+        bookByCoachView.setCoaches(coachController.getCoaches());
+
+        bookByCoachView.displayMenu();
+
+        int choice;
+        choice = bookByCoachView.getMenuChoice();
+
+        coach = coachController.getCoach(choice);
+
+        List<Lesson> lessons = lessonController.getLessons(coach);
+
+        setLessons(lessons);
+
+        String timeTable = lessonController.getTimeTable(lessons);
+
+        handleBookLesson(timeTable);
     }
 
     private void handleBookByGrade() {
