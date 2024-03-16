@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public abstract class View {
-    private final int length;
+    protected final int length;
     protected Scanner scanner;
 
     public View(int length) {

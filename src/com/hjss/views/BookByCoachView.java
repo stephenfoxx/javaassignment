@@ -25,6 +25,7 @@ public class BookByCoachView extends View {
     }
 
     protected boolean isValidMenuChoice(int choice) {
+        if (choice == 0) return true;
         for (Coach ch : coaches) {
             if (ch.getId() == choice) return true;
         }

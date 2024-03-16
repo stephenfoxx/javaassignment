@@ -17,6 +17,8 @@ public class AppController {
     private final TimeTableView timeTableView;
     private final BookByCoachView bookByCoachView;
 
+    private final BookByGradeView bookByGradeView;
+
     /**
      * Controller classes to handle Model logic
      */
@@ -43,6 +45,7 @@ public class AppController {
         this.bookByDayView = new BookByDayView();
         this.timeTableView = new TimeTableView();
         this.bookByCoachView = new BookByCoachView();
+        this.bookByGradeView = new BookByGradeView();
 
         // Inject controllers into Class instance
         this.studentController = studentController;
@@ -174,6 +177,8 @@ public class AppController {
         int choice;
         choice = bookByDayView.getMenuChoice();
 
+        if (choice == 0) System.exit(0);
+
         day = switch (choice) {
             case 1 -> Day.MONDAY;
             case 2 -> Day.WEDNESDAY;
@@ -202,6 +207,8 @@ public class AppController {
         int choice;
         choice = bookByCoachView.getMenuChoice();
 
+        if (choice == 0) System.exit(0);
+
         coach = coachController.getCoach(choice);
 
         List<Lesson> lessons = lessonController.getLessons(coach);
@@ -214,6 +221,31 @@ public class AppController {
     }
 
     private void handleBookByGrade() {
+        Grade grade;
+
+        bookByGradeView.displayMenu();
+
+        int choice;
+        choice = bookByGradeView.getMenuChoice();
+
+        if (choice == 0) System.exit(0);
+
+        grade = switch (choice) {
+            case 1 -> Grade.ONE;
+            case 2 -> Grade.TWO;
+            case 3 -> Grade.THREE;
+            case 4 -> Grade.FOUR;
+            case 5 -> Grade.FIVE;
+            default -> null;
+        };
+
+        List<Lesson> lessons = lessonController.getLessons(grade);
+
+        setLessons(lessons);
+
+        String timeTable = lessonController.getTimeTable(lessons);
+
+        handleBookLesson(timeTable);
     }
 
     private void handleBookLesson(String timeTable) {
@@ -226,6 +258,9 @@ public class AppController {
         }
 
         choice = timeTableView.getMenuChoice();
+
+        if (choice == 0) System.exit(0);
+        if (choice == 45) handleBookSwimmingLesson();
 
         Lesson lessonChoice = lessonController.getLesson(choice);
 

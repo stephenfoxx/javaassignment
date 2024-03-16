@@ -5,15 +5,17 @@ import java.util.List;
 
 public class TimeTableView extends View {
 
-    private ArrayList<Integer> ids = new ArrayList<Integer>();
+    private final ArrayList<Integer> ids = new ArrayList<Integer>();
     public TimeTableView() {
-        super(6);
+        super(45);
     }
 
     public void displayMenu(String timeTable) {
         System.out.println(" ");
         System.out.println("===================================== Time Table =====================================");
         System.out.println(timeTable);
+        System.out.println("45: Exit");
+        System.out.println("O: Exit");
     }
 
     @Override
@@ -25,6 +27,9 @@ public class TimeTableView extends View {
     }
 
     protected boolean isValidMenuChoice(int choice) {
-        return ids.contains(choice);
+        if(choice == this.length) {
+            return true;
+        }
+        return choice >= 0 || ids.contains(choice);
     }
 }

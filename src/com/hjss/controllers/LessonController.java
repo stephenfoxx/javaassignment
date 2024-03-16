@@ -117,6 +117,18 @@ public class LessonController {
         return lessonsForCoach;
     }
 
+    public List<Lesson> getLessons(Grade grade) {
+        List<Lesson> lessonsForGrade = new ArrayList<>();
+
+        for (Lesson lesson : lessons) {
+            if (lesson.getGrade().getValue() == grade.getValue()) {
+                lessonsForGrade.add(lesson);
+            }
+        }
+
+        return lessonsForGrade;
+    }
+
     public String getTimeTable(List<Lesson> lessons, Day day) {
         int splitter, weekCount = 1;
         StringBuilder s = new StringBuilder();
