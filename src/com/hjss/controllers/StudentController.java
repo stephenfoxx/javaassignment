@@ -58,7 +58,7 @@ public class StudentController {
         };
     }
 
-    public void register() throws InvalidAgeException {
+    public Student register() throws InvalidAgeException {
         Scanner console = new Scanner(System.in);
 
         String name, contactNumber;
@@ -102,6 +102,8 @@ public class StudentController {
         System.out.println("Registration Successful");
         System.out.println(ns.getAsString());
         System.out.println();
+
+        return ns;
     }
 
     public Student login() {

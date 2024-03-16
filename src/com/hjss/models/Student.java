@@ -47,26 +47,23 @@ public class Student {
 
     public void setGrade(Grade grade) {
         this.grade = grade;
-//        if (canUpgrade(grade.getValue())) {
-//            this.grade = grade;
-//        } else
     }
 
     public void setAge(int age) throws InvalidAgeException {
-        if(isValidAge(age)) {
+        if (isValidAge(age)) {
             this.age = age;
         } else {
             throw new InvalidAgeException();
         }
     }
 
-    private boolean canUpgrade(int value) {
+    public boolean canUpgrade(int value) {
         // This is an instantiation
         if (this.grade == null) return true;
 
         // Else, It is an update
         int gradeValue = this.grade.getValue();
-        return value == gradeValue + 1;
+        return value == gradeValue || value == gradeValue + 1;
     }
 
     private boolean isValidAge(int age) {

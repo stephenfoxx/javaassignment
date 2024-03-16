@@ -1,8 +1,11 @@
 package com.hjss.controllers;
 
 import com.hjss.enums.*;
+import com.hjss.exception.MaxLessonCapacityException;
+import com.hjss.exception.NotMatchingGradeException;
 import com.hjss.models.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +16,15 @@ public class LessonController {
     public LessonController(List<Lesson> lessons, List<Coach> coaches) {
         this.lessons = lessons;
         this.coaches = coaches;
+    }
+
+    public Lesson getLesson(int id) {
+        for(Lesson ls: lessons) {
+            if(ls.getId() == id) {
+                return ls;
+            }
+        }
+        return  null;
     }
 
     public void createLessons() {
@@ -78,5 +90,43 @@ public class LessonController {
                 }
             }
         }
+    }
+
+    public List<Lesson> getLessons(Day day) {
+        List<Lesson> lessonsForDay = new ArrayList<>();
+
+        for (Lesson lesson : lessons) {
+            if (lesson.getDay() == day) {
+                lessonsForDay.add(lesson);
+            }
+        }
+
+        return lessonsForDay;
+    }
+
+    public String getTimeTable(List<Lesson> lessons, Day day) {
+        int splitter, weekCount = 1;
+        StringBuilder s = new StringBuilder();
+
+        if (day == Day.SATURDAY) {
+            splitter = 2;
+        } else {
+            splitter = 3;
+        }
+
+        for (int i = 0; i < lessons.size(); i++) {
+            Lesson lesson = lessons.get(i);
+            if (i % splitter == 0) {
+                // Add Header
+                s.append("Week ").append(weekCount++).append("\n");
+            }
+            s.append(lesson.toString()).append("\n\n");
+        }
+
+        return s.toString();
+    }
+
+    public void bookLesson(Lesson lesson, Student student) throws MaxLessonCapacityException, NotMatchingGradeException {
+        lesson.addStudent(student);
     }
 }

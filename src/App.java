@@ -16,8 +16,6 @@ public class App {
     private final List<Lesson> lessons = new ArrayList<>();
 
     public App () {
-        var mainView = new MainView();
-
         // Initialize controllers
         var studentController = new StudentController(students);
         studentController.createStudents();
@@ -28,14 +26,10 @@ public class App {
         var lessonController = new LessonController(lessons, coaches);
         lessonController.createLessons();
 
-        appController = new AppController(mainView, studentController);
+        appController = new AppController(studentController, lessonController);
     }
 
     public void start() {
-        System.out.println(lessons.size());
-        for (Lesson ls: lessons) {
-            System.out.println(ls.getDay() + " " + ls.getTime() + " " + ls.getCoach().getName() + " " + ls.getGrade());
-        }
         // Start the application by showing the main menu for learners
         appController.showMainMenu();
     }

@@ -1,19 +1,35 @@
 package com.hjss.controllers;
 
-import com.hjss.exception.InvalidAgeException;
-import com.hjss.models.Student;
+import com.hjss.enums.*;
+import com.hjss.exception.*;
+import com.hjss.models.*;
 import com.hjss.views.*;
+
+import java.util.List;
 
 public class AppController {
     private MainView mainView;
-    private StudentController studentController;
     private BookLessonView bookLessonView;
+    private BookByDayView bookByDayView;
+    private TimeTableView timeTableView;
+
+    private StudentController studentController;
+    private LessonController lessonController;
+
     private Student loggedInStudent;
 
-    public AppController(MainView mainView, StudentController studentController) {
-        this.mainView = mainView;
-        this.studentController = studentController;
+    private List<Lesson> lessons;
+
+    public AppController(StudentController studentController, LessonController lessonController) {
+        this.mainView = new MainView();
         this.bookLessonView = new BookLessonView();
+        this.bookByDayView = new BookByDayView();
+        this.timeTableView = new TimeTableView();
+
+
+        this.studentController = studentController;
+        this.lessonController = lessonController;
+
     }
 
     public void showMainMenu() {
@@ -79,7 +95,8 @@ public class AppController {
 
         while (!registrationSuccessful) {
             try {
-                studentController.register();
+                Student rgs = studentController.register();
+                setLoggedInStudent(rgs);
                 registrationSuccessful = true; // If registration succeeds, exit the loop
             } catch (InvalidAgeException e) {
                 System.out.println(e.getMessage());
@@ -98,7 +115,17 @@ public class AppController {
         bookLessonView.displayMenu();
         int choice = bookLessonView.getMenuChoice();
 
-
+        switch (choice) {
+            case 1:
+                handleBookByDay();
+                break;
+            case 2:
+                handleBookByCoach();
+                break;
+            case 3:
+                handleBookByGrade();
+                break;
+        }
     }
 
     private void handleLogInUser() {
@@ -123,6 +150,59 @@ public class AppController {
     }
 
     private void handleBookByDay() {
+        Day day;
+        bookByDayView.displayMenu();
+        int choice;
+        choice = bookByDayView.getMenuChoice();
 
+        day = switch (choice) {
+            case 1 -> Day.MONDAY;
+            case 2 -> Day.WEDNESDAY;
+            case 3 -> Day.FRIDAY;
+            case 4 -> Day.SATURDAY;
+            default -> null;
+        };
+
+        List<Lesson> lessons = lessonController.getLessons(day);
+
+        setLessons(lessons);
+
+        String timeTable = lessonController.getTimeTable(lessons, day);
+
+        handleBookLesson(timeTable);
+    }
+
+    private void handleBookByCoach() {
+    }
+
+    private void handleBookByGrade() {
+    }
+
+    private void handleBookLesson(String timeTable) {
+        int choice;
+
+        timeTableView.displayMenu(timeTable);
+
+        for (Lesson ls : lessons) {
+            timeTableView.setId(ls.getId());
+        }
+
+        choice = timeTableView.getMenuChoice();
+
+        Lesson lessonChoice = lessonController.getLesson(choice);
+
+        try {
+            lessonController.bookLesson(lessonChoice, getLoggedInStudent());
+            System.out.println("You have been booked for Lesson " + lessonChoice.getId() + " on " + lessonChoice.getDay() + " by " + lessonChoice.getTime().getValue());
+        } catch (MaxLessonCapacityException | NotMatchingGradeException e) {
+            System.out.println(e.getMessage());
+
+            // recursive method call
+            handleBookLesson(timeTable);
+        }
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
     }
 }
