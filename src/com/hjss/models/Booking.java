@@ -52,6 +52,6 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\n";
+        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\nAttendance: " + getAttendance() + "\n";
     }
 }

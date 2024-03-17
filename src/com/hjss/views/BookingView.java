@@ -16,8 +16,7 @@ public class BookingView extends View {
 
     public void displayMenu() {
         System.out.println(" ");
-        System.out.println("Select Your Booking By Entering Booking Id");
-        System.out.println(" ");
+        System.out.println("Please enter the Booking ID of the lesson you want to select:");
         for (Booking bk: bookings) {
             System.out.println(bk.toString());
         }

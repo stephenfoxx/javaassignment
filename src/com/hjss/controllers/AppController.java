@@ -132,6 +132,19 @@ public class AppController {
         }
     }
 
+    private void handleLogInUser() {
+        // Ensure we Know who is performing this action.
+        Student currentUser = studentController.login();
+
+        // Current user will be null If the user requests to register a student from the List
+        if (currentUser == null) {
+            // Run the handle register student method
+            handleRegisterStudent();
+        } else {
+            setLoggedInStudent(currentUser);
+        }
+    }
+
     private void handleBookSwimmingLesson() {
 
         // Now we split into three branches
@@ -154,27 +167,6 @@ public class AppController {
                 handleBookLesson(handleBookByGrade());
                 break;
         }
-    }
-
-    private void handleLogInUser() {
-        // Ensure we Know who is performing this action.
-        Student currentUser = studentController.login();
-
-        // Current user will be null If the user requests to register a student from the List
-        if (currentUser == null) {
-            // Run the handle register student method
-            handleRegisterStudent();
-        } else {
-            setLoggedInStudent(currentUser);
-        }
-    }
-
-    public Student getLoggedInStudent() {
-        return loggedInStudent;
-    }
-
-    public void setLoggedInStudent(Student loggedInStudent) {
-        this.loggedInStudent = loggedInStudent;
     }
 
     private String handleBookByDay() {
@@ -265,16 +257,21 @@ public class AppController {
 
         try {
             Booking booking = bookingController.createBooking(getLoggedInStudent(), lessonChoice);
-            System.out.println("You have been booked for Lesson " + booking.getLesson().getId() + " on " + booking.getLesson().getDay() + " by " + booking.getLesson().getTime().getValue());
+            System.out.println();
+            System.out.println("\u001B[32mSuccess: Your booking was completed successfully\u001B[0m");
+            System.out.println();
+            System.out.println("Here is your booking information: ");
+            System.out.println(booking.toString());
         } catch (MaxLessonCapacityException | NotMatchingGradeException | DuplicateBookingException e) {
-            System.out.println(e.getMessage());
+            System.out.println();
+            System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
 
             // recursive method call
             handleBookLesson(timeTable);
         }
     }
 
-    public void handleChangeOrCancelBooking() {
+    private void handleChangeOrCancelBooking() {
         int choice = 0;
         // Get student Bookings
         List<Booking> bookings = bookingController.getBookings(getLoggedInStudent());
@@ -305,7 +302,7 @@ public class AppController {
 
     }
 
-    public void handleChangeBooking(Booking booking) {
+    private void handleChangeBooking(Booking booking) {
         // Now we split into three branches
         // 1. By day
         // 2. By Coach
@@ -328,7 +325,7 @@ public class AppController {
         }
     }
 
-    public void handleCancelBooking(Booking booking) {
+    private void handleCancelBooking(Booking booking) {
 
         try {
             bookingController.cancelBooking(booking, loggedInStudent);
@@ -351,7 +348,6 @@ public class AppController {
         choice = timeTableView.getMenuChoice();
 
         if (choice == 0) System.exit(0);
-        if (choice == 45) handleChangeBooking(booking);
 
         Lesson lessonChoice = lessonController.getLesson(choice);
 
@@ -365,7 +361,7 @@ public class AppController {
         }
     }
 
-    public void handleAttendALesson() {
+    private void handleAttendALesson() {
         int choice = 0;
         // Get student Bookings
         List<Booking> bookings = bookingController.getBookings(getLoggedInStudent());
@@ -381,9 +377,28 @@ public class AppController {
         choice = bookingController.showBookings(bookings);
 
         Booking booking = bookingController.getBooking(choice);
+
+        System.out.println();
+        System.out.println("You are about to attend a booking with this information: ");
+        System.out.println(booking);
+
+        bookingController.attendLesson(booking);
+
+        System.out.println("\u001B[32mSuccess: Your have successfully attended your booking!\u001B[0m");
+
+        System.out.println(booking);
+
     }
 
-    public void setLessons(List<Lesson> lessons) {
+    private void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
+    }
+
+    private Student getLoggedInStudent() {
+        return loggedInStudent;
+    }
+
+    private void setLoggedInStudent(Student loggedInStudent) {
+        this.loggedInStudent = loggedInStudent;
     }
 }
