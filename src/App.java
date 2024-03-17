@@ -24,8 +24,11 @@ public class App {
         List<Booking> bookings = new ArrayList<>();
         var bookingController = new BookingController(bookings);
 
+        List<Review> reviews = new ArrayList<>();
+        var reviewController = new ReviewController(reviews);
+
         // Inject into App controller
-        appController = new AppController(studentController, lessonController, coachController, bookingController);
+        appController = new AppController(studentController, lessonController, coachController, bookingController, reviewController);
     }
 
     public void start() {

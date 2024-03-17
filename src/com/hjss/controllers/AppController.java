@@ -26,6 +26,7 @@ public class AppController {
     private final LessonController lessonController;
     private final CoachController coachController;
     private final BookingController bookingController;
+    private final ReviewController reviewController;
 
     /**
      * Internally used data properties
@@ -38,7 +39,7 @@ public class AppController {
      * @param studentController Dependency injection of the student controller.
      * @param lessonController  Dependency injection of the lesson controller
      */
-    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController, BookingController bookingController) {
+    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController, BookingController bookingController, ReviewController reviewController) {
         // Instantiate and assign the Application menu options.
         this.mainView = new MainView();
         this.bookLessonView = new BookLessonView();
@@ -53,6 +54,7 @@ public class AppController {
         this.lessonController = lessonController;
         this.coachController = coachController;
         this.bookingController = bookingController;
+        this.reviewController = reviewController;
     }
 
     // First interaction with the application is to display the application menu
@@ -390,6 +392,14 @@ public class AppController {
         System.out.println("\u001B[32mSuccess: Your have successfully attended your booking!\u001B[0m");
 
         System.out.println(booking);
+
+        Review review = reviewController.create(booking);
+
+        System.out.println();
+        System.out.println("\u001B[32mSuccess: Your have successfully entered your review!\u001B[0m");
+        System.out.println();
+
+        System.out.println(review);
 
     }
 
