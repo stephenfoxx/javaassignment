@@ -15,12 +15,11 @@ public class LoginStudentView extends View{
 
     public void displayMenu() {
         System.out.println("Login Student");
-        int count = 0;
         for (Student st: students) {
-            System.out.println(padToTwoDigits(count + 1) + ": " + st.getName());
-            count++;
+            System.out.println(padToTwoDigits(st.getId()) + ": " + st.getName() + ", Grade: " + st.getGrade());
+
         }
-        System.out.println(count + 1 + ": Register a new Learner");
+        System.out.println(students.size() + 1 + ": Register a new Learner");
         System.out.println("0: Exit");
     }
 

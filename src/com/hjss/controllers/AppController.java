@@ -16,8 +16,8 @@ public class AppController {
     private final BookByDayView bookByDayView;
     private final TimeTableView timeTableView;
     private final BookByCoachView bookByCoachView;
-
     private final BookByGradeView bookByGradeView;
+    private final ChangeCancelView changeCancelView;
 
     /**
      * Controller classes to handle Model logic
@@ -46,6 +46,7 @@ public class AppController {
         this.timeTableView = new TimeTableView();
         this.bookByCoachView = new BookByCoachView();
         this.bookByGradeView = new BookByGradeView();
+        this.changeCancelView = new ChangeCancelView();
 
         // Inject controllers into Class instance
         this.studentController = studentController;
@@ -73,12 +74,15 @@ public class AppController {
                 // Login
                 handleLogInUser();
 
-                System.out.println("Change/Cancel a booking");
-                // Handle registration logic
+                // Handle Change/Cancel logic
+                handleChangeOrCancelBooking();
                 break;
             case 3:
                 // Login
                 handleLogInUser();
+
+                // Handle Attend A Lesson
+//                handleAttendALesson
 
                 System.out.println("Attend a swimming lesson");
                 // Handle registration logic
@@ -140,13 +144,13 @@ public class AppController {
 
         switch (choice) {
             case 1:
-                handleBookByDay();
+                handleBookLesson(handleBookByDay());
                 break;
             case 2:
-                handleBookByCoach();
+                handleBookLesson(handleBookByCoach());
                 break;
             case 3:
-                handleBookByGrade();
+                handleBookLesson(handleBookByGrade());
                 break;
         }
     }
@@ -172,7 +176,7 @@ public class AppController {
         this.loggedInStudent = loggedInStudent;
     }
 
-    private void handleBookByDay() {
+    private String handleBookByDay() {
         Day day;
         bookByDayView.displayMenu();
         int choice;
@@ -192,12 +196,10 @@ public class AppController {
 
         setLessons(lessons);
 
-        String timeTable = lessonController.getTimeTable(lessons);
-
-        handleBookLesson(timeTable);
+        return lessonController.getTimeTable(lessons);
     }
 
-    private void handleBookByCoach() {
+    private String handleBookByCoach() {
         Coach coach;
 
         // Update coaches
@@ -216,12 +218,10 @@ public class AppController {
 
         setLessons(lessons);
 
-        String timeTable = lessonController.getTimeTable(lessons);
-
-        handleBookLesson(timeTable);
+        return lessonController.getTimeTable(lessons);
     }
 
-    private void handleBookByGrade() {
+    private String handleBookByGrade() {
         Grade grade;
 
         bookByGradeView.displayMenu();
@@ -244,9 +244,7 @@ public class AppController {
 
         setLessons(lessons);
 
-        String timeTable = lessonController.getTimeTable(lessons);
-
-        handleBookLesson(timeTable);
+        return lessonController.getTimeTable(lessons);
     }
 
     private void handleBookLesson(String timeTable) {
@@ -268,11 +266,105 @@ public class AppController {
         try {
             Booking booking = bookingController.createBooking(getLoggedInStudent(), lessonChoice);
             System.out.println("You have been booked for Lesson " + booking.getLesson().getId() + " on " + booking.getLesson().getDay() + " by " + booking.getLesson().getTime().getValue());
-        } catch (MaxLessonCapacityException | NotMatchingGradeException e) {
+        } catch (MaxLessonCapacityException | NotMatchingGradeException | DuplicateBookingException e) {
             System.out.println(e.getMessage());
 
             // recursive method call
             handleBookLesson(timeTable);
+        }
+    }
+
+    public void handleChangeOrCancelBooking() {
+        int choice = 0;
+        // Get student Bookings
+        List<Booking> bookings = bookingController.getBookings(getLoggedInStudent());
+
+        if (bookings.isEmpty()) {
+            System.out.println("You do not have any bookings");
+            return;
+        }
+
+        // Show Booking
+        choice = bookingController.showBookings(bookings);
+
+        Booking booking = bookingController.getBooking(choice);
+
+        changeCancelView.displayMenu();
+        choice = changeCancelView.getMenuChoice();
+
+        switch (choice) {
+            case 1:
+                handleChangeBooking(booking);
+                break;
+            case 2:
+                handleCancelBooking(booking);
+                break;
+            default:
+                System.exit(0);
+        }
+
+    }
+
+    public void handleChangeBooking(Booking booking) {
+//        bookingController.changeBooking();
+//        bookingController
+
+        // Now we split into three branches
+        // 1. By day
+        // 2. By Coach
+        // 3. By Grade
+
+        // Print the menu first
+        bookLessonView.displayMenu();
+        int choice = bookLessonView.getMenuChoice();
+
+        switch (choice) {
+            case 1:
+                handleChangeLesson(handleBookByDay(), booking);
+                break;
+            case 2:
+                handleChangeLesson(handleBookByCoach(), booking);
+                break;
+            case 3:
+                handleChangeLesson(handleBookByGrade(), booking);
+                break;
+        }
+    }
+
+    public void handleCancelBooking(Booking booking) {
+
+        try {
+            bookingController.cancelBooking(booking, loggedInStudent);
+            System.out.println("You have successfully Cancelled Your Booking!");
+        } catch (ForbiddenException e) {
+            System.out.println(e.getMessage());
+            handleChangeOrCancelBooking();
+        }
+    }
+
+    private void handleChangeLesson(String timeTable, Booking booking) {
+        int choice;
+
+        timeTableView.displayMenu(timeTable);
+
+        for (Lesson ls : lessons) {
+            timeTableView.setId(ls.getId());
+        }
+
+        choice = timeTableView.getMenuChoice();
+
+        if (choice == 0) System.exit(0);
+        if (choice == 45) handleChangeBooking(booking);
+
+        Lesson lessonChoice = lessonController.getLesson(choice);
+
+        try {
+            Booking updated = bookingController.changeBooking(booking, lessonChoice, loggedInStudent);
+            System.out.println("Booking with ID " + updated.getId() + " updated");
+        } catch (MaxLessonCapacityException | NotMatchingGradeException | DuplicateBookingException |
+                 ForbiddenException e) {
+            System.out.println(e.getMessage());
+            handleChangeLesson(timeTable, booking);
         }
     }
 
