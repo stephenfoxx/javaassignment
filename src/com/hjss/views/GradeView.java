@@ -7,6 +7,7 @@ public class GradeView extends View {
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Choose Grade: ");
         System.out.println("1: One");
         System.out.println("2: Two");

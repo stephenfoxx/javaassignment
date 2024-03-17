@@ -13,6 +13,7 @@ public class BookByCoachView extends View {
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Book a swimming lesson By Coach");
         for (Coach ch : coaches) {
             System.out.println(ch.getId() + ": " + ch.getName());

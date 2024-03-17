@@ -7,6 +7,7 @@ public class BookLessonView extends View{
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Display TimeTable Option");
         System.out.println("1: By Day");
         System.out.println("2: By Coach");

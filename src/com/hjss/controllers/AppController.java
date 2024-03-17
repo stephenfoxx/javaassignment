@@ -82,10 +82,7 @@ public class AppController {
                 handleLogInUser();
 
                 // Handle Attend A Lesson
-//                handleAttendALesson
-
-                System.out.println("Attend a swimming lesson");
-                // Handle registration logic
+                handleAttendALesson();
                 break;
             case 4:
                 // Login
@@ -117,7 +114,9 @@ public class AppController {
     }
 
     private void handleRegisterStudent() {
+        System.out.println(" ");
         System.out.println("Register a new student");
+
         boolean registrationSuccessful = false;
 
         while (!registrationSuccessful) {
@@ -126,7 +125,9 @@ public class AppController {
                 setLoggedInStudent(rgs);
                 registrationSuccessful = true; // If registration succeeds, exit the loop
             } catch (InvalidAgeException e) {
-                System.out.println(e.getMessage());
+                System.out.println(" ");
+                System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
+                System.out.println(" ");
             }
         }
     }
@@ -259,7 +260,6 @@ public class AppController {
         choice = timeTableView.getMenuChoice();
 
         if (choice == 0) System.exit(0);
-        if (choice == 45) handleBookSwimmingLesson();
 
         Lesson lessonChoice = lessonController.getLesson(choice);
 
@@ -306,9 +306,6 @@ public class AppController {
     }
 
     public void handleChangeBooking(Booking booking) {
-//        bookingController.changeBooking();
-//        bookingController
-
         // Now we split into three branches
         // 1. By day
         // 2. By Coach
@@ -366,6 +363,24 @@ public class AppController {
             System.out.println(e.getMessage());
             handleChangeLesson(timeTable, booking);
         }
+    }
+
+    public void handleAttendALesson() {
+        int choice = 0;
+        // Get student Bookings
+        List<Booking> bookings = bookingController.getBookings(getLoggedInStudent());
+
+        if (bookings.isEmpty()) {
+            System.out.println(" ");
+            System.out.println("\u001B[31mYou do not have any bookings\u001B[0m");
+            System.out.println(" ");
+            return;
+        }
+
+        // Show Booking
+        choice = bookingController.showBookings(bookings);
+
+        Booking booking = bookingController.getBooking(choice);
     }
 
     public void setLessons(List<Lesson> lessons) {

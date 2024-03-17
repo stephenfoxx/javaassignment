@@ -7,6 +7,7 @@ public class ChangeCancelView extends View{
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Select The Change You Would Like To Make: ");
         System.out.println("1: Change");
         System.out.println("2: Cancel");

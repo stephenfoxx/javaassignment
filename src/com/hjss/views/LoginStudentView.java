@@ -4,9 +4,10 @@ import com.hjss.models.Student;
 
 import java.util.List;
 
-public class LoginStudentView extends View{
+public class LoginStudentView extends View {
     private final List<Student> students;
-    public LoginStudentView(List<Student> students){
+
+    public LoginStudentView(List<Student> students) {
         // Menu Length
         super(students.size());
 
@@ -14,8 +15,9 @@ public class LoginStudentView extends View{
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Login Student");
-        for (Student st: students) {
+        for (Student st : students) {
             System.out.println(padToTwoDigits(st.getId()) + ": " + st.getName() + ", Grade: " + st.getGrade());
 
         }

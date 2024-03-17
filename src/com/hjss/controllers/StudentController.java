@@ -97,9 +97,10 @@ public class StudentController {
         students.add(ns);
 
         System.out.println();
-        System.out.println("Registration Successful");
-        System.out.println(ns.getAsString());
+        System.out.println("\u001B[32mSuccess: Your registration was completed successfully\u001B[0m");
         System.out.println();
+        System.out.println("Student Information: ");
+        System.out.println(ns.getAsString());
 
         return ns;
     }

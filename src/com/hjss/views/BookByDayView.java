@@ -6,6 +6,7 @@ public class BookByDayView extends View {
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Book a swimming lesson By Day");
         System.out.println("1: Monday");
         System.out.println("2: Wednesday");

@@ -6,6 +6,7 @@ public class BookByGradeView extends View{
     }
 
     public void displayMenu() {
+        System.out.println(" ");
         System.out.println("Book a swimming lesson By Grade");
         System.out.println("1: Grade One");
         System.out.println("2: Grade Two");
