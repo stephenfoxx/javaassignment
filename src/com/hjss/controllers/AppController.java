@@ -5,7 +5,6 @@ import com.hjss.exception.*;
 import com.hjss.models.*;
 import com.hjss.views.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppController {
@@ -91,8 +90,7 @@ public class AppController {
                 handleShowLearnerReport();
                 break;
             case 5:
-                System.out.println("Monthly coach report");
-                // Handle registration logic
+                handleShowCoachReport();
                 break;
             case 6:
                 // Handle registration logic
@@ -432,6 +430,28 @@ public class AppController {
                     System.out.println();
                 }
             }
+        }
+    }
+
+    private void handleShowCoachReport() {
+        System.out.println();
+        System.out.println("Monthly coach report");
+        List<Coach> coaches = coachController.getCoaches();
+        for (Coach ch : coaches) {
+            List<Review> reviews = reviewController.getReviews(ch);
+
+            float avg = 0;
+
+            if (!reviews.isEmpty()) {
+                int sum = 0;
+                for (Review rv : reviews) {
+                    sum += rv.getRating().getValue();
+                }
+
+                avg = (float) sum / reviews.size();
+            }
+
+            System.out.println("Name: " + ch.getName() + "\nAverage Rating: " + avg);
         }
     }
 

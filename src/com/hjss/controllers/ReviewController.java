@@ -2,9 +2,11 @@ package com.hjss.controllers;
 
 import com.hjss.enums.Rating;
 import com.hjss.models.Booking;
+import com.hjss.models.Coach;
 import com.hjss.models.Review;
 import com.hjss.views.RatingView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,8 +55,15 @@ public class ReviewController {
         return console.nextLine();
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public List<Review> getReviews(Coach ch) {
+        List<Review> coachReviews = new ArrayList<>();
+
+        for (Review rv: reviews) {
+            if (rv.getBooking().getLesson().getCoach().equals(ch)) {
+                coachReviews.add(rv);
+            }
+        }
+        return coachReviews;
     }
 
     public Review getReview(Booking booking) {
