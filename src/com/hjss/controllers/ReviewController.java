@@ -10,16 +10,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Controller class responsible for managing review-related operations.
+ */
 public class ReviewController {
+
+    /**
+     * List to store review objects.
+     */
     private final List<Review> reviews;
 
+    /**
+     * The View class to display and retrieve choice input from user.
+     */
     private final RatingView ratingView;
 
+    /**
+     * Initializes a new instance of the ReviewController class with the specified list of reviews.
+     *
+     * @param reviews The list of reviews to be managed by the controller.
+     */
     public ReviewController(List<Review> reviews) {
         this.reviews = reviews;
         this.ratingView = new RatingView();
     }
 
+    /**
+     * Creates a new review based on the provided booking, prompting the user to provide a rating and feedback.
+     *
+     * @param booking The booking for which the review is being created.
+     * @return The newly created review.
+     */
     public Review create(Booking booking) {
         System.out.println("Give a review on the Lesson just attended");
 
@@ -30,6 +51,11 @@ public class ReviewController {
         return new Review(feedback, rating, booking);
     }
 
+    /**
+     * Requests the user to provide a rating for the review.
+     *
+     * @return The rating provided by the user.
+     */
     private Rating requestRating() {
         int choice;
 
@@ -47,6 +73,11 @@ public class ReviewController {
         };
     }
 
+    /**
+     * Requests the user to provide feedback for the review.
+     *
+     * @return The feedback provided by the user.
+     */
     private String requestFeedback() {
         Scanner console = new Scanner(System.in);
 
@@ -55,24 +86,20 @@ public class ReviewController {
         return console.nextLine();
     }
 
+    /**
+     * Retrieves all reviews associated with the specified coach.
+     *
+     * @param ch The coach for whom the reviews are being retrieved.
+     * @return A list of reviews associated with the specified coach.
+     */
     public List<Review> getReviews(Coach ch) {
         List<Review> coachReviews = new ArrayList<>();
 
-        for (Review rv: reviews) {
+        for (Review rv : reviews) {
             if (rv.getBooking().getLesson().getCoach().equals(ch)) {
                 coachReviews.add(rv);
             }
         }
         return coachReviews;
-    }
-
-    public Review getReview(Booking booking) {
-        for (Review rv : reviews) {
-            if (rv.getBooking().getId() == booking.getId()) {
-                return rv;
-            }
-        }
-
-        return null;
     }
 }
