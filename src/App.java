@@ -25,8 +25,8 @@ public class App {
         coachController.createCoaches();                   // Pre-create coaches while bootstrapping the application.
 
         List<Lesson> lessons = new ArrayList<>();
-        var lessonController = new LessonController(lessons, coaches);
-        lessonController.createLessons();                 // Pre-create lessons while bootstrapping the application.
+        var lessonController = new LessonController(lessons);
+        lessonController.createLessons(coaches);           // Pre-create lessons while bootstrapping the application.
 
         List<Booking> bookings = new ArrayList<>();
         var bookingController = new BookingController(bookings);
