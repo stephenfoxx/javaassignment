@@ -11,6 +11,9 @@ import com.hjss.views.LoginStudentView;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Controller class responsible for managing student-related operations.
+ */
 public class StudentController {
 
     private final GenderView genderView;
@@ -19,6 +22,11 @@ public class StudentController {
 
     private final List<Student> students;
 
+    /**
+     * Constructs a new StudentController with the provided list of students.
+     *
+     * @param st The list of students to be managed by this controller.
+     */
     public StudentController(List<Student> st) {
         genderView = new GenderView();
         gradeView = new GradeView();
@@ -26,6 +34,19 @@ public class StudentController {
         this.students = st;
     }
 
+    /**
+     * Creates a new student object with the provided details.
+     *
+     * @param id            The ID of the student.
+     * @param name          The name of the student.
+     * @param grade         The grade of the student.
+     * @param gender        The gender of the student.
+     * @param contactNumber The Emergency contact number of the student.
+     * @param age           The age of the student.
+     *
+     * @return The newly created student object.
+     * @throws InvalidAgeException If the age provided is invalid.
+     */
     private Student create(int id, String name, Grade grade, Gender gender, String contactNumber, int age) throws InvalidAgeException {
         Student newStudent = new Student(id, name, grade, gender, contactNumber);
         newStudent.setAge(age);
@@ -33,6 +54,12 @@ public class StudentController {
         return newStudent;
     }
 
+    /**
+     * Retrieves the gender enum value based on the user's choice.
+     *
+     * @param choice The integer representing the user's choice.
+     * @return The corresponding gender enum value, or null if the choice is invalid.
+     */
     private Gender getGenderFromChoice(int choice) {
         if (choice == 1) {
             return Gender.Male;
@@ -43,6 +70,12 @@ public class StudentController {
         }
     }
 
+    /**
+     * Retrieves the grade enum value based on the user's choice.
+     *
+     * @param choice The integer representing the user's choice.
+     * @return The corresponding grade enum value, or null if the choice is invalid.
+     */
     private Grade getGradeFromChoice(int choice) {
         return switch (choice) {
             case 1 -> Grade.ONE;
@@ -54,6 +87,12 @@ public class StudentController {
         };
     }
 
+    /**
+     * Creates a new student based on user input.
+     *
+     * @return The newly created student.
+     * @throws InvalidAgeException If the age provided is invalid.
+     */
     public Student register() throws InvalidAgeException {
         Scanner console = new Scanner(System.in);
 
@@ -108,6 +147,7 @@ public class StudentController {
     /**
      * Logs in a student by displaying the login menu, retrieving the user's choice,
      * and returning the corresponding student object.
+     *
      * @return The logged-in student or null if the user chooses to exit or register a new student.
      */
     public Student login() {
@@ -124,6 +164,9 @@ public class StudentController {
         return students.get(choice - 1);
     }
 
+    /**
+     * Creates a predefined set of students and adds them to the student list.
+     */
     public void createStudents() {
         students.add(new Student(1, "Elizabeth", Grade.ONE, Gender.Female, "123456", 4));
         students.add(new Student(2, "Amaka", Grade.TWO, Gender.Female, "1234567", 5));
@@ -142,6 +185,12 @@ public class StudentController {
         students.add(new Student(15, "Ethan", Grade.FIVE, Gender.Male, "1234577", 7));
     }
 
+
+    /**
+     * Retrieves the list of students managed by this controller.
+     *
+     * @return The list of students.
+     */
     public List<Student> getStudents() {
         return students;
     }
