@@ -1,5 +1,8 @@
 package com.hjss.models;
 
+/**
+ * Represents a booking made by a student for a lesson.
+ */
 public class Booking {
     private final int id;
     private Lesson lesson;
@@ -7,6 +10,13 @@ public class Booking {
     private boolean attendance;
     private boolean cancelled;
 
+    /**
+     * Constructor for the Booking class.
+     *
+     * @param id      The unique identifier for the booking.
+     * @param lesson  The lesson booked by the student.
+     * @param student The student who made the booking.
+     */
     public Booking(int id, Lesson lesson, Student student) {
         // Update lesson size
         lesson.setSize(lesson.getSize() + 1);
@@ -20,14 +30,29 @@ public class Booking {
         this.attendance = false;
     }
 
+    /**
+     * Getter method for booking id
+     *
+     * @return The id of the booking
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Getter method for booking lesson
+     *
+     * @return lesson associated with the booking
+     */
     public Lesson getLesson() {
         return lesson;
     }
 
+    /**
+     * Updates the lesson associated with the booking.
+     *
+     * @param lesson The new lesson to be associated with the booking.
+     */
     public void setLesson(Lesson lesson) {
         // Reduce old lesson size
         this.lesson.setSize(this.lesson.getSize() - 1);
@@ -39,18 +64,34 @@ public class Booking {
         lesson.setSize(lesson.getSize() + 1);
     }
 
+    /**
+     * Retrieves the student associated with the booking.
+     *
+     * @return The student associated with the booking.
+     */
     public Student getStudent() {
         return student;
     }
 
+    /**
+     * Retrieves the attendance status of the booking.
+     *
+     * @return true if the booking has been attended, false otherwise.
+     */
     public boolean getAttendance() {
         return attendance;
     }
 
+    /**
+     * Mark the booking as attended
+     */
     public void markAttendance() {
         this.attendance = true;
     }
 
+    /**
+     * Sets the booking as cancelled and adjusts the lesson size accordingly.
+     */
     public void setCancelled() {
         // Reduce the lesson size by 1
         lesson.setSize(lesson.getSize() - 1);
@@ -59,6 +100,11 @@ public class Booking {
         this.cancelled = true;
     }
 
+    /**
+     * Checks if the booking has been cancelled.
+     *
+     * @return true if the booking has been cancelled, false otherwise.
+     */
     public boolean isCancelled() {
         return cancelled;
     }
