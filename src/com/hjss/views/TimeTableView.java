@@ -14,7 +14,7 @@ public class TimeTableView extends View {
         System.out.println(" ");
         System.out.println("===================================== Time Table =====================================");
         System.out.println(timeTable);
-        System.out.println("45: Exit");
+        System.out.println("45: Back");
         System.out.println("O: Exit");
     }
 

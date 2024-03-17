@@ -21,7 +21,7 @@ public class BookingController {
     }
 
     public Booking createBooking(Student student, Lesson lesson) throws NotMatchingGradeException, MaxLessonCapacityException, DuplicateBookingException {
-        if (student.canUpgrade(lesson.getGrade().getValue())) {
+        if (student.isUpgradeNotAllowed(lesson.getGrade().getValue())) {
             // Throw Not matching grade error
             throw new NotMatchingGradeException();
         }
@@ -88,7 +88,7 @@ public class BookingController {
 
 
     public Booking changeBooking(Booking booking, Lesson newLesson, Student student) throws NotMatchingGradeException, MaxLessonCapacityException, DuplicateBookingException, ForbiddenException {
-        if (student.canUpgrade(newLesson.getGrade().getValue())) {
+        if (student.isUpgradeNotAllowed(newLesson.getGrade().getValue())) {
             // Throw Not matching grade error
             throw new NotMatchingGradeException();
         }
@@ -110,6 +110,8 @@ public class BookingController {
 
         booking.setLesson(newLesson);
 
+        // Ensure Student grade match new lesson grade
+        student.setGrade(newLesson.getGrade());
 
         return booking;
     }

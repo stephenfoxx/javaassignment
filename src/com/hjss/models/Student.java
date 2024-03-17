@@ -64,7 +64,7 @@ public class Student {
         }
     }
 
-    public boolean canUpgrade(int value) {
+    public boolean isUpgradeNotAllowed(int value) {
         // This is an instantiation
         if (this.grade == null) return false;
 
