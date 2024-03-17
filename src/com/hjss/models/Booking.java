@@ -5,6 +5,7 @@ public class Booking {
     private Lesson lesson;
     private final Student student;
     private boolean attendance;
+    private boolean cancelled;
 
     public Booking(int id, Lesson lesson, Student student) {
         // Update lesson size
@@ -50,8 +51,20 @@ public class Booking {
         this.attendance = true;
     }
 
+    public void setCancelled() {
+        // Reduce the lesson size by 1
+        lesson.setSize(lesson.getSize() - 1);
+
+        // Set cancel to true
+        this.cancelled = true;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
     @Override
     public String toString() {
-        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\nAttendance: " + getAttendance() + "\n";
+        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\nAttendance: " + getAttendance() + "\nCancelled: " + isCancelled() + "\n";
     }
 }

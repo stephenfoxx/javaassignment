@@ -79,7 +79,7 @@ public class BookingController {
         }
 
         // Check if the booking has already been attended
-        if(booking.getAttendance()) {
+        if (booking.getAttendance()) {
             throw new BookingAttendedException();
         }
 
@@ -113,14 +113,11 @@ public class BookingController {
         }
 
         // Check if the booking has already been attended
-        if(booking.getAttendance()) {
+        if (booking.getAttendance()) {
             throw new BookingAttendedException();
         }
 
-        bookings.remove(booking);
-
-        // Reduce the lesson size by 1
-        booking.getLesson().setSize(booking.getLesson().getSize() - 1);
+        booking.setCancelled();
     }
 
     public void attendLesson(Booking booking) {

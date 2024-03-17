@@ -332,7 +332,10 @@ public class AppController {
 
         try {
             bookingController.cancelBooking(booking, loggedInStudent);
-            System.out.println("You have successfully Cancelled Your Booking!");
+            System.out.println();
+            System.out.println("\u001B[32mSuccess: Your booking was successfully cancelled\u001B[0m");
+            System.out.println();
+            System.out.println(booking);
         } catch (ForbiddenException | BookingAttendedException e) {
             System.out.println();
             System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
@@ -357,7 +360,9 @@ public class AppController {
 
         try {
             Booking updated = bookingController.changeBooking(booking, lessonChoice, loggedInStudent);
-            System.out.println("Booking with ID " + updated.getId() + " updated");
+            System.out.println();
+            System.out.println("\u001B[32mSuccess: Booking with ID" + updated.getId() + " updated" + "\u001B[0m");
+            System.out.println();
         } catch (MaxLessonCapacityException | NotMatchingGradeException | DuplicateBookingException |
                  ForbiddenException | BookingAttendedException e) {
             System.out.println();
