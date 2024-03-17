@@ -1,9 +1,6 @@
 package com.hjss.controllers;
 
-import com.hjss.exception.DuplicateBookingException;
-import com.hjss.exception.ForbiddenException;
-import com.hjss.exception.MaxLessonCapacityException;
-import com.hjss.exception.NotMatchingGradeException;
+import com.hjss.exception.*;
 
 import com.hjss.models.Booking;
 import com.hjss.models.Lesson;
@@ -54,18 +51,6 @@ public class BookingController {
         return studentBookings;
     }
 
-    public List<Booking> getBookings(Lesson lesson) {
-        List<Booking> lessonBookings = new ArrayList<>();
-
-        for (Booking booking : bookings) {
-            if (booking.getLesson().getId() == lesson.getId()) {
-                lessonBookings.add(booking);
-            }
-        }
-
-        return lessonBookings;
-    }
-
     public Booking getBooking(Lesson lesson, Student student) {
         for (Booking booking : bookings) {
             if (booking.getLesson().getId() == lesson.getId() && booking.getStudent().getId() == student.getId()) {
@@ -87,7 +72,17 @@ public class BookingController {
     }
 
 
-    public Booking changeBooking(Booking booking, Lesson newLesson, Student student) throws NotMatchingGradeException, MaxLessonCapacityException, DuplicateBookingException, ForbiddenException {
+    public Booking changeBooking(Booking booking, Lesson newLesson, Student student) throws NotMatchingGradeException, MaxLessonCapacityException, DuplicateBookingException, ForbiddenException, BookingAttendedException {
+        // Student own the booking ?
+        if (student.getId() != booking.getStudent().getId()) {
+            throw new ForbiddenException("Student Not Permitted to Make changes to this booking");
+        }
+
+        // Check if the booking has already been attended
+        if(booking.getAttendance()) {
+            throw new BookingAttendedException();
+        }
+
         if (student.isUpgradeNotAllowed(newLesson.getGrade().getValue())) {
             // Throw Not matching grade error
             throw new NotMatchingGradeException();
@@ -103,11 +98,6 @@ public class BookingController {
             throw new DuplicateBookingException();
         }
 
-        // Student own the booking ?
-        if (student.getId() != booking.getStudent().getId()) {
-            throw new ForbiddenException("Student Not Permitted to Make changes to this booking");
-        }
-
         booking.setLesson(newLesson);
 
         // Ensure Student grade match new lesson grade
@@ -116,10 +106,15 @@ public class BookingController {
         return booking;
     }
 
-    public void cancelBooking(Booking booking, Student student) throws ForbiddenException {
+    public void cancelBooking(Booking booking, Student student) throws ForbiddenException, BookingAttendedException {
         // Student own the booking ?
         if (student.getId() != booking.getStudent().getId()) {
             throw new ForbiddenException("Student Not Permitted to Make changes to this booking");
+        }
+
+        // Check if the booking has already been attended
+        if(booking.getAttendance()) {
+            throw new BookingAttendedException();
         }
 
         bookings.remove(booking);

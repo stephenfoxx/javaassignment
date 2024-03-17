@@ -277,7 +277,8 @@ public class AppController {
         List<Booking> bookings = bookingController.getBookings(getLoggedInStudent());
 
         if (bookings.isEmpty()) {
-            System.out.println("You do not have any bookings");
+            System.out.println();
+            System.out.println("\u001B[31mYou do not have any bookings\u001B[0m");
             return;
         }
 
@@ -330,8 +331,9 @@ public class AppController {
         try {
             bookingController.cancelBooking(booking, loggedInStudent);
             System.out.println("You have successfully Cancelled Your Booking!");
-        } catch (ForbiddenException e) {
-            System.out.println(e.getMessage());
+        } catch (ForbiddenException | BookingAttendedException e) {
+            System.out.println();
+            System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
             handleChangeOrCancelBooking();
         }
     }
@@ -355,8 +357,9 @@ public class AppController {
             Booking updated = bookingController.changeBooking(booking, lessonChoice, loggedInStudent);
             System.out.println("Booking with ID " + updated.getId() + " updated");
         } catch (MaxLessonCapacityException | NotMatchingGradeException | DuplicateBookingException |
-                 ForbiddenException e) {
-            System.out.println(e.getMessage());
+                 ForbiddenException | BookingAttendedException e) {
+            System.out.println();
+            System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
             handleChangeLesson(timeTable, booking);
         }
     }
