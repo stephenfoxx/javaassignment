@@ -77,7 +77,8 @@ public class Student {
         return age >= 4 && age <= 11;
     }
 
-    public String getAsString() {
+    @Override
+    public String toString() {
         return "Name: " + getName() + "\nAge: " + getAge() + "\nGender: " + getGender() + "\nGrade: " + getGrade() + "\nEmergency Contact Number: " + getContactNumber();
     }
 }

@@ -100,7 +100,7 @@ public class StudentController {
         System.out.println("\u001B[32mSuccess: Your registration was completed successfully\u001B[0m");
         System.out.println();
         System.out.println("Student Information: ");
-        System.out.println(ns.getAsString());
+        System.out.println(ns);
 
         return ns;
     }
@@ -137,4 +137,7 @@ public class StudentController {
         students.add(new Student(15, "Ethan", Grade.FIVE, Gender.Male, "1234577", 7));
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
 }

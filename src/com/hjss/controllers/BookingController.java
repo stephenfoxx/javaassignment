@@ -131,4 +131,30 @@ public class BookingController {
 
         return bookingView.getMenuChoice();
     }
+
+    public List<Booking> getCancelledBookings(Student st) {
+        List<Booking> stuBookings = getBookings(st);
+        List<Booking> cancelledBookings = new ArrayList<>();
+
+        for (Booking bk: stuBookings) {
+            if (bk.isCancelled()) {
+                cancelledBookings.add(bk);
+            }
+        }
+
+        return cancelledBookings;
+    }
+
+    public List<Booking> getAttendedBookings(Student st) {
+        List<Booking> stuBookings = getBookings(st);
+        List<Booking> attendedBookings = new ArrayList<>();
+
+        for (Booking bk: stuBookings) {
+            if (bk.getAttendance()) {
+                attendedBookings.add(bk);
+            }
+        }
+
+        return attendedBookings;
+    }
 }

@@ -5,6 +5,7 @@ import com.hjss.exception.*;
 import com.hjss.models.*;
 import com.hjss.views.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppController {
@@ -87,16 +88,9 @@ public class AppController {
                 handleAttendALesson();
                 break;
             case 4:
-                // Login
-                handleLogInUser();
-
-                System.out.println("Monthly learner report");
-                // Handle registration logic
+                handleShowLearnerReport();
                 break;
             case 5:
-                // Login
-                handleLogInUser();
-
                 System.out.println("Monthly coach report");
                 // Handle registration logic
                 break;
@@ -406,6 +400,39 @@ public class AppController {
 
         System.out.println(review);
 
+    }
+
+    private void handleShowLearnerReport() {
+        // Lessons
+        // no of booked
+        // no of cancelled
+        // no of attended
+        System.out.println();
+        System.out.println("Report For Hatfield Junior Swimming School For The Month");
+
+        List<Student> students = studentController.getStudents();
+
+        for (Student st : students) {
+            // Get student bookings
+            List<Booking> bookings = bookingController.getBookings(st);
+            List<Booking> cancelledBookings = bookingController.getCancelledBookings(st);
+            List<Booking> attendedBookings = bookingController.getAttendedBookings(st);
+
+            System.out.println(st + "\nTotal Booking: " + bookings.size() + "\nTotal Attended: " + attendedBookings.size() + "\nTotal Cancelled: " + cancelledBookings.size());
+
+            System.out.println("Lessons booked by " + st.getName() + ":");
+            if (bookings.isEmpty()) {
+                System.out.println();
+                System.out.println("\u001B[31m" + st.getName() + " has no lesson history\u001B[0m");
+                System.out.println();
+            } else {
+                // Lessons
+                for (Booking bk : bookings) {
+                    System.out.println(bk.getLesson());
+                    System.out.println();
+                }
+            }
+        }
     }
 
     private void setLessons(List<Lesson> lessons) {

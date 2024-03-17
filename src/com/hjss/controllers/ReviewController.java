@@ -56,4 +56,14 @@ public class ReviewController {
     public List<Review> getReviews() {
         return reviews;
     }
+
+    public Review getReview(Booking booking) {
+        for (Review rv : reviews) {
+            if (rv.getBooking().getId() == booking.getId()) {
+                return rv;
+            }
+        }
+
+        return null;
+    }
 }
