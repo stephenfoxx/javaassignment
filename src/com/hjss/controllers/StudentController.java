@@ -105,6 +105,11 @@ public class StudentController {
         return ns;
     }
 
+    /**
+     * Logs in a student by displaying the login menu, retrieving the user's choice,
+     * and returning the corresponding student object.
+     * @return The logged-in student or null if the user chooses to exit or register a new student.
+     */
     public Student login() {
         var loginStudentView = new LoginStudentView(students);
         loginStudentView.displayMenu();
