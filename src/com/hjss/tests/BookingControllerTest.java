@@ -1,6 +1,7 @@
 package com.hjss.tests;
 
 import com.hjss.exception.*;
+
 import com.hjss.models.Booking;
 import com.hjss.models.Coach;
 import com.hjss.models.Lesson;
