@@ -47,14 +47,14 @@ public abstract class View {
                 choice = scanner.nextInt();
 
                 if (!isValidMenuChoice(choice)) {
-                    throw new InvalidMenuChoiceException("Enter Valid Menu Option");
+                    throw new InvalidMenuChoiceException("Enter Valid Menu Choice");
                 }
 
                 isValidInput = true; // If no exception occurs, input is valid
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("\u001B[31mInvalid input. Please enter a number.\u001B[0m");
             } catch (InvalidMenuChoiceException e) {
-                System.out.println(e.getMessage());
+                System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
             }
 
             scanner.nextLine(); // Clear the invalid input from the scanner

@@ -412,15 +412,26 @@ public class AppController {
         }
     }
 
+    /**
+     * Handles the cancellation of a booking.
+     *
+     * @param booking The booking to be cancelled.
+     */
     private void handleCancelBooking(Booking booking) {
 
         try {
+            // Attempt to cancel the booking
             bookingController.cancelBooking(booking, loggedInStudent);
+
+            // Print success message
             System.out.println();
             System.out.println("\u001B[32mSuccess: Your booking was successfully cancelled\u001B[0m");
+
+            // Print details of the cancelled booking
             System.out.println();
             System.out.println(booking);
         } catch (ForbiddenException | BookingAttendedException e) {
+            // If an exception occurs, print an error message and prompt the user to select a booking again
             System.out.println();
             System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
             handleChangeOrCancelBooking();
