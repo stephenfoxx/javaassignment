@@ -248,7 +248,7 @@ class BookingControllerTest {
             bookingController.cancelBooking(booking, student);
 
             // Assert that the booking is cancelled
-            assertTrue(booking.isCancelled());
+            assertTrue(booking.getIsCancelled());
 
             // Assert that a space has been freed up in the lesson
             assertEquals(3, lesson.getVacancy());
@@ -288,7 +288,7 @@ class BookingControllerTest {
         bookingController.attendLesson(booking);
 
         // Assert that the booking has been marked as attended
-        assertTrue(booking.getAttendance());
+        assertTrue(booking.getAttended());
     }
 
     @Test

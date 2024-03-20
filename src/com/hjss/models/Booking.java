@@ -7,8 +7,8 @@ public class Booking {
     private final int id;
     private Lesson lesson;
     private final Student student;
-    private boolean attendance;
-    private boolean cancelled;
+    private boolean isAttended;
+    private boolean isCancelled;
 
     /**
      * Constructor for the Booking class.
@@ -27,7 +27,7 @@ public class Booking {
         this.id = id;
         this.lesson = lesson;
         this.student = student;
-        this.attendance = false;
+        this.isAttended = false;
     }
 
     /**
@@ -78,15 +78,15 @@ public class Booking {
      *
      * @return true if the booking has been attended, false otherwise.
      */
-    public boolean getAttendance() {
-        return attendance;
+    public boolean getAttended() {
+        return isAttended;
     }
 
     /**
      * Mark the booking as attended
      */
     public void markAttendance() {
-        this.attendance = true;
+        this.isAttended = true;
     }
 
     /**
@@ -97,7 +97,7 @@ public class Booking {
         lesson.setSize(lesson.getSize() - 1);
 
         // Set cancel to true
-        this.cancelled = true;
+        this.isCancelled = true;
     }
 
     /**
@@ -105,12 +105,12 @@ public class Booking {
      *
      * @return true if the booking has been cancelled, false otherwise.
      */
-    public boolean isCancelled() {
-        return cancelled;
+    public boolean getIsCancelled() {
+        return isCancelled;
     }
 
     @Override
     public String toString() {
-        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\nAttendance: " + getAttendance() + "\nCancelled: " + isCancelled() + "\n";
+        return "ID: " + getId() + "\nLesson Id: " + getLesson().getId() + "\nLesson Day: " + getLesson().getDay() + "\nLesson Time: " + getLesson().getTime().getValue() + "\nGrade: " + getLesson().getGrade() + "\nCoach: " + getLesson().getCoach().getName() + "\nAttendance: " + getAttended() + "\nCancelled: " + getIsCancelled() + "\n";
     }
 }

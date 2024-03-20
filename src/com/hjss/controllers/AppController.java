@@ -42,7 +42,13 @@ public class AppController {
      * @param bookingController Dependency injection of the booking controller.
      * @param reviewController  Dependency injection of the review controller.
      */
-    public AppController(StudentController studentController, LessonController lessonController, CoachController coachController, BookingController bookingController, ReviewController reviewController) {
+    public AppController(
+            StudentController studentController,
+            LessonController lessonController,
+            CoachController coachController,
+            BookingController bookingController,
+            ReviewController reviewController
+    ) {
 
         // Instantiate and assign the Application Views.
         this.mainView = new MainView();
@@ -618,7 +624,7 @@ public class AppController {
      *
      * @param lessons The list of lessons to be set.
      */
-    private void setLessons(List<Lesson> lessons) {
+    public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 
@@ -627,7 +633,7 @@ public class AppController {
      *
      * @return The logged-in student.
      */
-    private Student getLoggedInStudent() {
+    public Student getLoggedInStudent() {
         return loggedInStudent;
     }
 

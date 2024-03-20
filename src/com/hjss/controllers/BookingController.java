@@ -141,7 +141,7 @@ public class BookingController {
         }
 
         // Check if the booking has already been attended
-        if (booking.getAttendance()) {
+        if (booking.getAttended()) {
             throw new BookingAttendedException();
         }
 
@@ -185,7 +185,7 @@ public class BookingController {
         }
 
         // Check if the booking has already been attended
-        if (booking.getAttendance()) {
+        if (booking.getAttended()) {
             throw new BookingAttendedException();
         }
 
@@ -227,7 +227,7 @@ public class BookingController {
         List<Booking> cancelledBookings = new ArrayList<>();
 
         for (Booking bk : stuBookings) {
-            if (bk.isCancelled()) {
+            if (bk.getIsCancelled()) {
                 cancelledBookings.add(bk);
             }
         }
@@ -246,7 +246,7 @@ public class BookingController {
         List<Booking> attendedBookings = new ArrayList<>();
 
         for (Booking bk : stuBookings) {
-            if (bk.getAttendance()) {
+            if (bk.getAttended()) {
                 attendedBookings.add(bk);
             }
         }
