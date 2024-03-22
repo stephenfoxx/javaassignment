@@ -21,9 +21,6 @@ public class Booking {
         // Update lesson size
         lesson.setSize(lesson.getSize() + 1);
 
-        // Ensure student grade match lesson grade
-        student.setGrade(lesson.getGrade());
-
         this.id = id;
         this.lesson = lesson;
         this.student = student;
@@ -86,6 +83,9 @@ public class Booking {
      * Mark the booking as attended
      */
     public void markAttendance() {
+        // Ensure student grade match lesson grade
+        student.setGrade(lesson.getGrade());
+
         this.isAttended = true;
     }
 
