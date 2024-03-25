@@ -1,15 +1,19 @@
 package com.hjss.tests;
 
 import com.hjss.controllers.BookingController;
+
 import com.hjss.enums.Day;
 import com.hjss.enums.Gender;
 import com.hjss.enums.Grade;
 import com.hjss.enums.Time;
+
 import com.hjss.exception.*;
+
 import com.hjss.models.Booking;
 import com.hjss.models.Coach;
 import com.hjss.models.Lesson;
 import com.hjss.models.Student;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,25 +26,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingControllerTest {
     private BookingController bookingController;
     private List<Booking> bookings;
-//
-//    // Mocking a lesson
-//    private final Lesson lesson = new Lesson(1, Grade.ONE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
-//
-    // Mocking a student
-//    private final Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
-//
-//    // Mocking Coach
 
 
     @BeforeEach
     void setUp() {
         bookings = new ArrayList<>();
-
-
-//        // Create bookings for a student with ID 1
-//        bookings.add(new Booking(1, lesson, student));
-//
-
 
         // Create the booking controller with the test bookings
         bookingController = new BookingController(bookings);
