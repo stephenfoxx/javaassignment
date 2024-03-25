@@ -198,7 +198,11 @@ public class BookingController {
      *
      * @param booking The booking to mark as attended.
      */
-    public void attendLesson(Booking booking) {
+    public void attendLesson(Booking booking) throws ForbiddenException {
+        // Check if booking is canceled.
+        if(booking.getIsCancelled()) {
+            throw new ForbiddenException("This booking has been attended");
+        }
         booking.markAttendance();
     }
 

@@ -1,16 +1,16 @@
 package com.hjss.tests;
 
+import com.hjss.controllers.BookingController;
+import com.hjss.enums.Day;
+import com.hjss.enums.Gender;
+import com.hjss.enums.Grade;
+import com.hjss.enums.Time;
 import com.hjss.exception.*;
-
 import com.hjss.models.Booking;
 import com.hjss.models.Coach;
 import com.hjss.models.Lesson;
 import com.hjss.models.Student;
-
-import com.hjss.enums.*;
-
-import com.hjss.controllers.BookingController;
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,52 +22,47 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingControllerTest {
     private BookingController bookingController;
     private List<Booking> bookings;
-
-    // Mocking a lesson
-    private final Lesson lesson = new Lesson(1, Grade.ONE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
-
+//
+//    // Mocking a lesson
+//    private final Lesson lesson = new Lesson(1, Grade.ONE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+//
     // Mocking a student
-    private final Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
-
-    // Mocking Coach
-    private final Coach coach = new Coach(1, "Tester");
+//    private final Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+//
+//    // Mocking Coach
 
 
     @BeforeEach
     void setUp() {
         bookings = new ArrayList<>();
 
-        // Populate bookings' list with test data
-        // Add some bookings associated with a specific student
-        // Ensure there are bookings for other students too
-        // For simplicity, we'll create bookings with dummy data
 
-
-        // Create bookings for a student with ID 1
-        bookings.add(new Booking(1, lesson, student));
-
-        // Create bookings for a student with ID 2
-        bookings.add(new Booking(2, new Lesson(2, Grade.TWO, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, coach), student));
-
-        // Create bookings for a student with ID 3
-        bookings.add(new Booking(3, new Lesson(3, Grade.THREE, Day.FRIDAY, Time.TIME_4PM_TO_5PM, coach), student));
+//        // Create bookings for a student with ID 1
+//        bookings.add(new Booking(1, lesson, student));
+//
 
 
         // Create the booking controller with the test bookings
         bookingController = new BookingController(bookings);
     }
 
+    @AfterEach
+    void tearDown() {
+        bookings.clear();
+    }
+
     @Test
     void testCreateBooking() {
         // Create a sample student and lesson
         Student student = new Student(10, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
         Lesson lesson = new Lesson(10, Grade.ONE, Day.MONDAY, Time.TIME_6PM_TO_7PM, new Coach(1, "Tester"));
 
         // Try to create a booking
         try {
             Booking booking = bookingController.createBooking(student, lesson);
             assertNotNull(booking);
-            assertEquals(4, booking.getId());
+            assertEquals(1, booking.getId());
             assertEquals(lesson, booking.getLesson());
             assertEquals(student, booking.getStudent());
         } catch (Exception e) {
@@ -76,37 +71,49 @@ class BookingControllerTest {
     }
 
     @Test
-    void testCreateBookingForHighGradeMatchingOneStepHigherLessonGrade() {
-        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
-
-        // Student has a grade higher than that of the lesson by one step
+    void testCreateBookingWithHigherLessonGradeByOneStep() {
+        // Create a sample student and lesson
         Student student = new Student(10, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_6PM_TO_7PM, new Coach(1, "Tester"));
 
         // Try to create a booking
         try {
             Booking booking = bookingController.createBooking(student, lesson);
+
             assertNotNull(booking);
-            assertEquals(4, booking.getId());
+
+            // Grade should remain one
+            assertEquals(Grade.ONE, booking.getStudent().getGrade());
+            assertEquals(1, booking.getId());
             assertEquals(lesson, booking.getLesson());
             assertEquals(student, booking.getStudent());
-
-            // Student Grade should match Lesson Grade after booking
-            assertEquals(student.getGrade(), lesson.getGrade());
         } catch (Exception e) {
             fail("Exception thrown when creating booking: " + e.getMessage());
         }
     }
 
     @Test
-    void testCreateBookingWithNotMatchingGrade() {
-        // Create a sample student and lesson with mismatching grades
-        // A student should be able to book a lesson with their grade level or one step higher
-        Student student = new Student(10, "John", Grade.ONE, Gender.Male, "1234567890", 8);
-        Lesson lesson = new Lesson(10, Grade.THREE, Day.MONDAY, Time.TIME_5PM_TO_6PM, new Coach(1, "Tester"));
+    void testCreateBookingWithStudentGradeTwoStepsLowerThanLessonGrade() {
+        Student student = new Student(10, "John", Grade.TWO, Gender.Male, "1234567890", 8);
+        Lesson lesson = new Lesson(10, Grade.FOUR, Day.MONDAY, Time.TIME_5PM_TO_6PM, new Coach(1, "Tester"));
 
         // Try to create a booking
         assertThrows(NotMatchingGradeException.class, () -> bookingController.createBooking(student, lesson));
     }
+
+    @Test
+    void testCreateBookingWithStudentGradeOneStepHigherThanLessonGrade() {
+        // Create a Sample lesson
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Student has a grade higher than that of the lesson by one step
+        Student student = new Student(10, "John", Grade.THREE, Gender.Male, "1234567890", 8);
+
+        // Try to create a booking
+        assertThrows(NotMatchingGradeException.class, () -> bookingController.createBooking(student, lesson));
+    }
+
 
     @Test
     void testCreateBookingWhenLessonIsFull() {
@@ -145,6 +152,16 @@ class BookingControllerTest {
         // Create a student for whom to retrieve bookings
         Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
 
+        // Mock Coach
+        Coach coach = new Coach(1, "Tester");
+
+
+        bookings.add(new Booking(20, new Lesson(2, Grade.TWO, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, coach), student));
+
+
+        bookings.add(new Booking(30, new Lesson(3, Grade.THREE, Day.FRIDAY, Time.TIME_4PM_TO_5PM, coach), student));
+
+
         // Get the bookings for the student
         List<Booking> studentBookings = bookingController.getBookings(student);
 
@@ -156,6 +173,17 @@ class BookingControllerTest {
 
     @Test
     void testGetBookingByLessonAndStudent() {
+        // Create a student for whom to retrieve bookings
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        // Mock Coach
+        Coach coach = new Coach(1, "Tester");
+
+        Lesson lesson = new Lesson(2, Grade.TWO, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, coach);
+
+
+        bookings.add(new Booking(20, lesson, student));
+
         // Retrieve the booking
         Booking retrievedBooking = bookingController.getBooking(lesson, student);
 
@@ -166,8 +194,19 @@ class BookingControllerTest {
 
     @Test
     void testGetBookingById() {
+        // Create a student for whom to retrieve bookings
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        // Mock Coach
+        Coach coach = new Coach(1, "Tester");
+
+        Lesson lesson = new Lesson(2, Grade.TWO, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, coach);
+
+
+        bookings.add(new Booking(20, lesson, student));
+
         // Retrieve the booking by its ID
-        Booking retrievedBooking = bookingController.getBooking(1);
+        Booking retrievedBooking = bookingController.getBooking(20);
 
         // Assert that the retrieved booking is not null and matches the added booking
         assertNotNull(retrievedBooking);
@@ -176,7 +215,15 @@ class BookingControllerTest {
 
     @Test
     void testChangeBooking() {
-        Lesson newLesson = new Lesson(10, Grade.THREE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        Lesson newLesson = new Lesson(20, Grade.TWO, Day.SATURDAY, Time.TIME_2PM_TO_3PM, new Coach(2, "Tester2"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
 
         // Try to change the booking to a new lesson
         try {
@@ -185,7 +232,7 @@ class BookingControllerTest {
             // Assert that the booking is updated correctly
             assertNotNull(updatedBooking);
             assertEquals(newLesson, updatedBooking.getLesson());
-            assertEquals(Grade.THREE, student.getGrade());
+            assertEquals(Grade.TWO, student.getGrade());
         } catch (Exception e) {
             fail("Exception thrown when changing booking: " + e.getMessage());
         }
@@ -193,16 +240,33 @@ class BookingControllerTest {
 
     @Test
     void testChangeBookingForbiddenException() {
-        Lesson newLesson = new Lesson(10, Grade.THREE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        Lesson newLesson = new Lesson(20, Grade.TWO, Day.SATURDAY, Time.TIME_2PM_TO_3PM, new Coach(2, "Tester2"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
 
         // Try to change the booking with a different student
         Student otherStudent = new Student(10, "Alice", Grade.THREE, Gender.Female, "9876543210", 7);
+
         assertThrows(ForbiddenException.class, () -> bookingController.changeBooking(bookings.getFirst(), newLesson, otherStudent));
     }
 
     @Test
     void testChangeBookingBookingAttendedException() {
-        Lesson newLesson = new Lesson(10, Grade.THREE, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        Lesson newLesson = new Lesson(20, Grade.TWO, Day.SATURDAY, Time.TIME_2PM_TO_3PM, new Coach(2, "Tester2"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
 
         // Mark booking attendance
         bookings.getFirst().markAttendance();
@@ -213,16 +277,32 @@ class BookingControllerTest {
 
     @Test
     void testChangeBookingNotMatchingGradeException() {
-        // Try to change the booking to a lesson with a grade not matching the student's grade
-        // should be 3 now
-        Lesson mismatchedGradeLesson = new Lesson(2, Grade.TWO, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, new Coach(2, "Test Coach"));
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
+
+        Lesson mismatchedGradeLesson = new Lesson(2, Grade.THREE, Day.WEDNESDAY, Time.TIME_3PM_TO_4PM, new Coach(2, "Test Coach"));
+
         assertThrows(NotMatchingGradeException.class, () -> bookingController.changeBooking(bookings.getFirst(), mismatchedGradeLesson, student));
     }
 
     @Test
     void testChangeBookingMaxLessonCapacityException() {
+
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
+
         // Add a fully booked lesson
-        Lesson fullyBookedLesson = new Lesson(2, Grade.THREE, Day.MONDAY, Time.TIME_2PM_TO_3PM, new Coach(2, "Test Coach"));
+        Lesson fullyBookedLesson = new Lesson(2, Grade.TWO, Day.MONDAY, Time.TIME_2PM_TO_3PM, new Coach(2, "Test Coach"));
         fullyBookedLesson.setSize(4);
 
         // Try to change the booking to the fully booked lesson
@@ -231,16 +311,28 @@ class BookingControllerTest {
 
     @Test
     void testChangeBookingDuplicateBookingException() {
-        // Try to change the booking to a lesson already booked by the student
-        // All Bookings in the bookings' list were booked by the student
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
+
         assertThrows(DuplicateBookingException.class, () -> bookingController.changeBooking(bookings.getFirst(), bookings.getLast().getLesson(), student));
     }
 
     @Test
     void testCancelBooking() {
-        // Add a booking to the list
-        Booking booking = new Booking(10, lesson, student);
-        bookings.add(booking);
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
+
+        Booking booking = bookings.getFirst();
 
 
         // Try to cancel the booking
@@ -249,17 +341,48 @@ class BookingControllerTest {
 
             // Assert that the booking is cancelled
             assertTrue(booking.getIsCancelled());
-
-            // Assert that a space has been freed up in the lesson
-            assertEquals(3, lesson.getVacancy());
         } catch (Exception e) {
             fail("Exception thrown when cancelling booking: " + e.getMessage());
         }
     }
+
+    @Test
+    void testCancelBookingAccurateVacancy() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add the booking to the list
+        bookings.add(new Booking(20, lesson, student));
+
+        // Lesson vacancy should be down by 1
+        assertEquals(3, lesson.getVacancy());
+
+        Booking booking = bookings.getFirst();
+
+
+        // Try to cancel the booking
+        try {
+            bookingController.cancelBooking(booking, student);
+
+            // Assert that a space has been freed up in the lesson
+            assertEquals(4, lesson.getVacancy());
+        } catch (Exception e) {
+            fail("Exception thrown when cancelling booking: " + e.getMessage());
+        }
+    }
+
     @Test
     void testCancelBookingForbiddenException() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
         // Add a booking to the list
         Booking booking = new Booking(1, lesson, student);
+
         bookings.add(booking);
 
         // Try to cancel the booking with a different student
@@ -269,6 +392,11 @@ class BookingControllerTest {
 
     @Test
     void testCancelBookingBookingAttendedException() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
         // Add an attended booking to the list
         Booking attendedBooking = new Booking(1, lesson, student);
         attendedBooking.markAttendance();
@@ -280,19 +408,53 @@ class BookingControllerTest {
 
     @Test
     void testAttendLesson() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
         // Add a booking to the list
         Booking booking = new Booking(1, lesson, student);
         bookings.add(booking);
 
-        // Mark the booking as attended
-        bookingController.attendLesson(booking);
+        try {
+            // Mark the booking as attended
+            bookingController.attendLesson(booking);
 
-        // Assert that the booking has been marked as attended
-        assertTrue(booking.getAttended());
+            // Assert that the booking has been marked as attended
+            assertTrue(booking.getAttended());
+        } catch (Exception e) {
+            fail("Exception thrown when attending a booking: " + e.getMessage());
+        }
+
+
+    }
+    @Test
+    void testAttendCanceledBookingWithForbiddenException() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+        // Add a booking to the list
+        Booking booking = new Booking(1, lesson, student);
+        bookings.add(booking);
+
+        // Cancel the booking
+        booking.setCancelled();
+
+
+        // Try to Attend a cancelled booking
+        assertThrows(ForbiddenException.class, () -> bookingController.attendLesson(booking));
     }
 
     @Test
     void testGetCancelledBookings() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
         // Add a cancelled booking to the list
         Booking cancelledBooking = new Booking(1, lesson, student);
         cancelledBooking.setCancelled();
@@ -312,6 +474,12 @@ class BookingControllerTest {
     }
     @Test
     void testGetAttendedBookings() {
+        // Create a student
+        Student student = new Student(1, "John", Grade.ONE, Gender.Male, "1234567890", 8);
+
+        Lesson lesson = new Lesson(10, Grade.TWO, Day.MONDAY, Time.TIME_4PM_TO_5PM, new Coach(1, "Tester"));
+
+
         // Add an attended booking to the list
         Booking attendedBooking = new Booking(1, lesson, student);
         attendedBooking.markAttendance();

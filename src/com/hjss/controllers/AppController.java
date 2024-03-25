@@ -526,8 +526,14 @@ public class AppController {
         System.out.println("You are about to attend a booking with this information: ");
         System.out.println(booking);
 
-        // Attend the selected lesson
-        bookingController.attendLesson(booking);
+        try {
+            // Attend the selected lesson
+            bookingController.attendLesson(booking);
+        } catch (ForbiddenException e) {
+            System.out.println();
+            System.out.println("\u001B[31m" + e.getMessage() + "\u001B[0m");
+            return;
+        }
 
         // Display a success message for attending the lesson
         System.out.println("\u001B[32mSuccess: Your have successfully attended your booking!\u001B[0m");
