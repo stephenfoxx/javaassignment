@@ -17,4 +17,8 @@ public class RatingView extends View{
         System.out.println(Rating.FOUR.getValue() + ": " + Rating.FOUR.getDescription());
         System.out.println(Rating.FIVE.getValue() + ": " + Rating.FIVE.getDescription());
     }
+
+    protected boolean isValidMenuChoice(int choice) {
+        return choice >= 1 && choice <= length;
+    }
 }

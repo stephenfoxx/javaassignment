@@ -612,6 +612,7 @@ public class AppController {
 
             // Calculate average rating
             if (!reviews.isEmpty()) {
+
                 int sum = 0;
                 for (Review rv : reviews) {
                     sum += rv.getRating().getValue();

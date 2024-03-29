@@ -48,7 +48,12 @@ public class ReviewController {
 
         String feedback = requestFeedback();
 
-        return new Review(feedback, rating, booking);
+        var newReview = new Review(feedback, rating, booking);
+
+        // Add review to list
+        reviews.add(newReview);
+
+        return newReview;
     }
 
     /**

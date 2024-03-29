@@ -22,4 +22,14 @@ public class BookingView extends View {
         }
         System.out.println("0: Exit");
     }
+
+    protected boolean isValidMenuChoice(int choice) {
+        if(choice == 0) return true;
+
+        for(Booking bk: bookings) {
+            if(bk.getId() == choice) return true;
+        }
+
+        return false;
+    }
 }
